@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EMI Calculator</title>
+<style>
+body{
+    font-family: Arial;
+    background:#111;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.box{
+    background:#222;
+    padding:25px;
+    border-radius:10px;
+    width:320px;
+}
+input,select,button{
+    width:100%;
+    padding:8px;
+    margin:6px 0;
+    border-radius:6px;
+    border:none;
+}
+button{
+    background:orange;
+    font-weight:bold;
+    cursor:pointer;
+}
+button:hover{
+    background:#ffb000;
+}
+.result{
+    margin-top:10px;
+    color:lightgreen;
+    line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>EMI Calculator</h2>
+
+<input id="p" type="number" placeholder="Principal Amount">
+<input id="r" type="number" placeholder="Interest Rate (%)">
+<input id="t" type="number" placeholder="Time (Years)">
+
+<select id="type">
+  <option value="simple">Simple Interest</option>
+  <option value="compound">Compound Interest</option>
+</select>
+
+<button onclick="calculate()">Calculate EMI</button>
+
+<div class="result" id="res"></div>
+</div>
+
+<script>
+function calculate(){
+
+ let P = parseFloat(document.getElementById("p").value);
+ let R = parseFloat(document.getElementById("r").value);
+ let T = parseFloat(document.getElementById("t").value);
+ let type = document.getElementById("type").value;
+
+ if(!P || !R || !T){
+   res.innerHTML = "⚠ Please enter all values!";
+   return;
+ }
+
+ let months = T * 12;
+ let rate = R / 12 / 100;
+
+ let emi,total,interest;
+
+ if(type=="simple"){
+    interest = (P * R * T)/100;
+    total = P + interest;
+    emi = total / months;
+ }else{
+    emi = (P * rate * Math.pow(1+rate,months)) / 
+          (Math.pow(1+rate,months)-1);
+    total = emi * months;
+    interest = total - P;
+ }
+
+ res.innerHTML = `
+ <b>Monthly EMI :</b> ₹ ${emi.toFixed(2)} <br>
+ <b>Total Interest :</b> ₹ ${interest.toFixed(2)} <br>
+ <b>Total Amount Payable :</b> ₹ ${total.toFixed(2)} <br>
+ <b>Duration :</b> ${months} months
+ `;
+}
+</script>
+
+</body>
+</html>
